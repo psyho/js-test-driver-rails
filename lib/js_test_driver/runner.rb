@@ -35,11 +35,14 @@ module JsTestDriver
     end
 
     def start_server
-      command = execute_jar.option('--port', config.port)
-      system(command.to_s)
+      start_server_command.run
     end
 
     protected
+
+    def start_server_command
+      execute_jar.option('--port', config.port)
+    end
 
     def execute_jar
       Command.new('java').option('-jar', jar_path)
@@ -89,6 +92,10 @@ module JsTestDriver
         value = "'#{value}'" if value && value =~ /\s/
         @command = [@command, name, value].compact.join(' ')
         self
+      end
+
+      def run
+        system(self.to_s)
       end
 
       def to_s

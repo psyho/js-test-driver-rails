@@ -35,7 +35,7 @@ module JsTestDriver
       config = JsTestDriver::Config.new(:port => 6666)
       runner = given_a_runner(:config => config)
 
-      runner.expects(:system).with("java -jar #{runner.jar_path} --port #{config.port}")
+      JsTestDriver::Runner::Command.any_instance.expects(:system).with("java -jar #{runner.jar_path} --port #{config.port}")
 
       runner.start_server
     end
