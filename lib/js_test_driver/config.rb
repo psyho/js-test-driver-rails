@@ -9,6 +9,10 @@ module JsTestDriver
   # user a significant amount of freedom in terms of what is and is not loaded, and so on
   class Config
 
+    def initialize(attributes = {})
+      self.attributes = attributes
+    end
+
     def included_files
       @includes ||= []
     end
@@ -57,6 +61,14 @@ module JsTestDriver
       config.instance_eval(string)
       return config
     end
+
+    private
+
+    def attributes=(values)
+      values.each do |attr, value|
+        self.send("#{attr}=", value)
+      end
+    end 
 
   end
 end
