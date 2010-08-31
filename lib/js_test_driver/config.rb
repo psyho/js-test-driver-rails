@@ -1,4 +1,12 @@
 module JsTestDriver
+  # The Config class represents the YAML config file that is passed to JsTestDriver
+  #
+  # includes corresponds to load
+  # excludes corresponds to exclude
+  # server can be configures either using server, or host and port
+  #
+  # The configuration is very basic, however the fact that it is done in Ruby, gives the
+  # user a significant amount of freedom in terms of what is and is not loaded, and so on
   class Config
 
     def included_files
