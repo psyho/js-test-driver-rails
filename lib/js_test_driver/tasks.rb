@@ -1,5 +1,4 @@
-require File.expand_path('config', File.dirname(__FILE__))
-require File.expand_path('runner', File.dirname(__FILE__))
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'js_test_driver'))
 
 namespace :js_test_driver do
 

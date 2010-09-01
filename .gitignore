@@ -1,1 +1,4 @@
 .idea
+.rvmrc
+.bundle
+jsTestDriver.conf
