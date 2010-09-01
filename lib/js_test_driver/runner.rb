@@ -1,5 +1,5 @@
 module JsTestDriver
-
+  # The Runner class is used
   class Runner
 
     def initialize(attributes = {})
@@ -34,14 +34,24 @@ module JsTestDriver
       @tmp_path ||= default_config_yml_path
     end
 
+    # starts the server on the default port specified in the config file
     def start_server
       start_server_command.run
     end
 
+    # captures the browsers
+    #
+    # by default it will capture the browsers specified in the config,
+    # but you can pass an argument like 'opera,chrome,firefox' to capture opera, chrome and firefox
     def capture_browsers(browsers = nil)
       capture_browsers_command(browsers).run
     end
 
+    # runs the tests specified by the argument
+    #
+    # by default it will run all the tests, but you can pass a string like:
+    # 'TestCase' or 'TestCase.test'
+    # to run either a single test case or a single test
     def run_tests(tests = nil)
       run_tests_command(tests).run  
     end
