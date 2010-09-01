@@ -81,6 +81,18 @@ module JsTestDriver
       assert_config_includes config, 'load' => ['src/*.js']
     end
 
+    def test_config_with_browsers
+      # given
+      config = given_an_empty_config
+
+      # when
+      config.browser('firefox')
+      config.browser('chrome')
+
+      # then
+      assert_equal ['firefox', 'chrome'], config.browsers
+    end
+
     def test_config_with_multiple_includes
       # given
       config = given_an_empty_config

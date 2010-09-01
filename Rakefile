@@ -8,3 +8,5 @@ require 'rake/testtask'
 require 'rake/rdoctask'
 
 require 'tasks/rails'
+
+require File.expand_path('lib/js_test_driver/tasks', File.dirname(__FILE__))

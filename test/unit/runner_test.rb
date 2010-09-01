@@ -28,16 +28,60 @@ module JsTestDriver
       runner = given_a_runner
 
       # then
-      assert runner.tmp_path
+      assert runner.config_yml_path
+    end
+
+    def expect_command_to_be_executed(cmd)
+      JsTestDriver::Runner::Command.any_instance.expects(:system).with(cmd)
     end
 
     def test_should_run_server_with_given_port_number
       config = JsTestDriver::Config.new(:port => 6666)
       runner = given_a_runner(:config => config)
 
-      JsTestDriver::Runner::Command.any_instance.expects(:system).with("java -jar #{runner.jar_path} --port #{config.port}")
+      expect_command_to_be_executed("java -jar #{runner.jar_path} --port #{config.port}")
 
       runner.start_server
+    end
+
+    def test_should_run_all_tests_by_default
+      runner = given_a_runner(:config => JsTestDriver::Config.new)
+
+      expect_command_to_be_executed("java -jar #{runner.jar_path} --config #{runner.config_yml_path} --tests all")
+
+      runner.run_tests
+    end
+
+    def test_should_run_selected_tests
+      runner = given_a_runner(:config => JsTestDriver::Config.new)
+
+      expect_command_to_be_executed("java -jar #{runner.jar_path} --config #{runner.config_yml_path} --tests MyTestCase.some_test")
+
+      runner.run_tests('MyTestCase.some_test')
+    end
+
+    def test_should_raise_exception_if_no_browsers_defined_to_capture
+      runner = given_a_runner(:config => JsTestDriver::Config.new)
+
+      assert_raises(ArgumentError) do
+        runner.capture_browsers
+      end
+    end
+
+    def test_should_capture_default_browsers
+      runner = given_a_runner(:config => JsTestDriver::Config.new(:browsers => ['foo', 'bar', 'baz']))
+
+      expect_command_to_be_executed("java -jar #{runner.jar_path} --config #{runner.config_yml_path} --browser foo,bar,baz")
+
+      runner.capture_browsers
+    end
+
+    def test_should_capture_given_browsers
+      runner = given_a_runner(:config => JsTestDriver::Config.new(:browsers => ['foo', 'bar', 'baz']))
+
+      expect_command_to_be_executed("java -jar #{runner.jar_path} --config #{runner.config_yml_path} --browser aaa,bbb")
+
+      runner.capture_browsers('aaa,bbb')
     end
 
   end

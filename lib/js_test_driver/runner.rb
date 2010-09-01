@@ -30,21 +30,44 @@ module JsTestDriver
     # this is where the config yml file will be saved, by default its /tmp/js_test_driver.(contents MD5).yml
     attr_writer :tmp_path
 
-    def tmp_path
-      @tmp_path ||= default_tmp_path
+    def config_yml_path
+      @tmp_path ||= default_config_yml_path
     end
 
     def start_server
       start_server_command.run
     end
 
+    def capture_browsers(browsers = nil)
+      capture_browsers_command(browsers).run
+    end
+
+    def run_tests(tests = nil)
+      run_tests_command(tests).run  
+    end
+
     protected
 
     def start_server_command
-      execute_jar.option('--port', config.port)
+      execute_jar_command.option('--port', config.port)
     end
 
-    def execute_jar
+    def run_tests_command(tests)
+      run_with_config.option('--tests', tests || "all") #.option('--runnerMode', 'DEBUG')
+    end
+
+    def capture_browsers_command(browsers)
+      browsers ||= config.browsers.join(',')
+      raise ArgumentError.new("No browsers defined!") if browsers == ""
+      run_with_config.option('--browser', browsers)
+    end
+
+    def run_with_config
+      save_config_file(config_yml_path)
+      execute_jar_command.option('--config', config_yml_path)
+    end
+
+    def execute_jar_command
       Command.new('java').option('-jar', jar_path)
     end
 
@@ -69,13 +92,15 @@ module JsTestDriver
       return File.expand_path(path)
     end
 
-    def default_tmp_path
-      dir = Dir.tmpdir
-      hash =  Digest::MD5.hexdigest(config.to_s)
-      return File.expand_path(File.join(dir, "js_test_driver.#{hash}.yml"))
+    def default_config_yml_path
+      return File.expand_path("jsTestDriver.conf")
     end
 
     private
+
+    def save_config_file(path)
+      File.open(path, "w+") { |f| f.puts config.to_s }
+    end
 
     def attributes=(values)
       values.each do |attr, value|

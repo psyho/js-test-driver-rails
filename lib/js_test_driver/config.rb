@@ -33,6 +33,18 @@ module JsTestDriver
       end
     end
 
+    attr_writer :browsers
+
+    def browsers
+      @browsers ||= []
+    end
+
+    def browser(browsers)
+      browsers.each do |browser|
+        self.browsers << browser
+      end
+    end
+
     def self.define_config_variable(name, &block)
       attr_writer name
 
