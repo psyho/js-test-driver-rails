@@ -1,0 +1,28 @@
+js-test-driver-rails is a thin wrapper for the JsTestDriver library: http://code.google.com/p/js-test-driver/
+
+To take advantage of it, you should create a js_test_driver.rb file in your RAILS_ROOT/config/ directory.
+
+The file may contain following directives:
+
+includes 'foo', 'bar', 'public/javascripts/*.js' # files to be included
+excludes 'public/javascripts/fail.js' # files to be excluded, useful with globbing
+
+host 'my-laptop' # the host to which the test runner will connect, by default 'localhost'
+port 6666 # the port to which test runner will connect, and on which the test server will start, by default 4224
+
+browser 'firefox' # you can specify the default browsers which will be captured
+
+Note, that this is a ruby file, so the file/browser list can be generated dynamically - it's completely up to you.
+
+This gem comes with 3 rake tasks:
+
+# start the js test driver server
+rake js_test_driver:start_server
+
+# capture the default (or specified) browsers
+rake js_test_driver:capture_browsers [BROWSERS=foo,bar,baz]
+
+# run the tests (all or the specified ones)
+rake js_test_driver:run_tests [TESTS=TestCase[.testMethod]]
+
+You can add these tasks by requiring "js_test_driver/tasks"
