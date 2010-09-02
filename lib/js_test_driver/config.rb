@@ -146,7 +146,6 @@ module JsTestDriver
       html_fixtures.each do |fixture|
         path = fixture_file_name(fixture)
         FileUtils.mkdir_p(File.dirname(path))
-        puts File.dirname(path)
         File.open(path, "w+") do |f|
           f.puts fixture.to_s
         end
