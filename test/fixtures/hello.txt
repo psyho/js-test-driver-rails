@@ -1,0 +1,1 @@
+This file is not a HTML file, so it will not be used as a fixture.

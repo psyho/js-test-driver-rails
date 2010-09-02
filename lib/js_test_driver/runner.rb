@@ -13,6 +13,15 @@ module JsTestDriver
       @config ||= parse_config
     end
 
+    attr_writer :generated_files_dir
+
+    # this is where the generated files will be saved, by default this is `pwd`/.js_test_driver
+    #
+    # the generated files are the config yml file and the fixture files
+    def generated_files_dir
+      @generated_files_dir || default_generated_files_dir
+    end
+
     # this is the path of the config file, by default its `pwd`/config/js_test_driver.rb
     attr_writer :config_path
 
@@ -27,7 +36,8 @@ module JsTestDriver
       @jar_path ||= default_jar_path
     end
 
-    # this is where the config yml file will be saved, by default its /tmp/js_test_driver.(contents MD5).yml
+    # this is where the config yml file will be saved, by default its saved in the generated files
+    # directory under the name jsTestDriver.conf
     attr_writer :tmp_path
 
     def config_yml_path
@@ -88,7 +98,9 @@ module JsTestDriver
       else
         warn("Could not find JS Test Driver config: '#{config_path}', assuming empty config file!")
       end
-      JsTestDriver::Config.parse(source)
+      config = JsTestDriver::Config.parse(source)
+      config.config_dir = generated_files_dir
+      return config
     end
 
     def default_config_path
@@ -103,13 +115,19 @@ module JsTestDriver
     end
 
     def default_config_yml_path
-      return File.expand_path("jsTestDriver.conf")
+      return File.expand_path("jsTestDriver.conf", generated_files_dir)
+    end
+
+    def default_generated_files_dir
+      return File.expand_path(".js_test_driver")
     end
 
     private
 
     def save_config_file(path)
+      Dir.mkdir(generated_files_dir) unless File.exists?(generated_files_dir)
       File.open(path, "w+") { |f| f.puts config.to_s }
+      config.save_fixtures
     end
 
     def attributes=(values)

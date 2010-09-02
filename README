@@ -4,6 +4,8 @@ To take advantage of it, you should create a js_test_driver.rb file in your RAIL
 
 The file may contain following directives:
 
+# the paths are relative to the current directory, but you can use absolute paths too
+# this is different from the JsTestDriver which does not allow you to use absolute paths in the config file 
 includes 'foo', 'bar', 'public/javascripts/*.js' # files to be included
 excludes 'public/javascripts/fail.js' # files to be excluded, useful with globbing
 
@@ -13,6 +15,34 @@ port 6666 # the port to which test runner will connect, and on which the test se
 browser 'firefox' # you can specify the default browsers which will be captured
 
 Note, that this is a ruby file, so the file/browser list can be generated dynamically - it's completely up to you.
+
+For example in our project we examine a list of known browsers to determine the ones installed on the developer's system,
+and define only those that were found.
+
+Similarly we get the list of .js files to include from our asset packaging solution.
+
+js-test-driver-rails also allows you to define HTML fixtures easily.
+
+Imagine you have a directory structure like this:
+
+RAILS_ROOT:
+  test/
+    js/
+      fixtures/
+        foo/
+          a.html
+        a.html
+
+Then by defining the fixtures directory in your config file:
+fixtures "test/js/fixtures"
+
+At runtime, your tests will have access to the contents of the fixture files:
+htmlFixtures.all["a"] // contents of the test/js/fixtures/a.html
+htmlFixtures.all["foo/a"] // contents of the test/js/fixtures/foo/a.html
+
+You can customize the namespace and fixture container name:
+fixtures "test/js/fixtures", :name => "html", :namespace => "myApp"
+# the fixtures will be accessible through myApp.html["<fixture name goes here>"]
 
 This gem comes with 3 rake tasks:
 

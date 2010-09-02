@@ -13,22 +13,21 @@ module JsTestDriver
       self.attributes = attributes
     end
 
-    # Adds a file to be loaded, the path *must* be relative to the yml config file (which is placed in the RAILS_ROOT
-    # by default)
+    # Adds a file to be loaded, the path *must* be relative to the root_dir (which is the current dir by default)
     #
     # JsTestDriver supports globbing
     def includes(*paths)
       paths.each do |path|
-        self.included_files << path
+        self.included_files << File.expand_path(path)
       end
     end
 
     # Files specified here will not be loaded, it's useful when combined with globbing in includes 
     #
-    # paths should be relative to RAILS_ROOT
+    # paths should be relative to root_dir
     def excludes(*paths)
       paths.each do |path|
-        self.excluded_files << path
+        self.excluded_files << File.expand_path(path)
       end
     end
 
@@ -40,6 +39,24 @@ module JsTestDriver
       browsers.each do |browser|
         self.browsers << browser
       end
+    end
+
+    # Defines a HTML fixture directory
+    #
+    # the first argument is the directory to scan for html fixtures
+    # you can pass also :name and :namespace arguments to define the name and the namespace of the fixture
+    #
+    # the fixtures will be accessible through:
+    # namespace.name["file_name_without the html extension"]
+    #
+    # by default the namespace is called htmlFixtures
+    # and the fixture name is called all     
+    def fixtures(directory, opts = {})
+      fixture = JsTestDriver::HtmlFixture.new(directory, opts[:name], opts[:namespace])
+      if html_fixtures.detect{|f| f.name == fixture.name && f.namespace == fixture.namespace}
+        raise ArgumentError.new("Fixture #{fixture.namespace}.#{fixture.name} already defined!")
+      end  
+      html_fixtures << fixture
     end
 
     # config variable which has a regular setter,
@@ -85,6 +102,10 @@ module JsTestDriver
       @excludes ||= []
     end
 
+    def html_fixtures
+      @html_fixtures ||= []
+    end
+
     attr_writer :browsers
 
     def browsers
@@ -93,8 +114,8 @@ module JsTestDriver
 
     def to_s
       hash = {'server' => server}
-      hash['load'] = included_files unless included_files.empty?
-      hash['exclude'] = excluded_files unless excluded_files.empty?
+      hash['load'] = loaded_files unless loaded_files.empty?
+      hash['exclude'] = map_paths(excluded_files) unless excluded_files.empty?
       return hash.to_yaml
     end
 
@@ -104,7 +125,53 @@ module JsTestDriver
       return config
     end
 
+    attr_writer :config_dir
+
+    # this is where the config files are saved (ex. RAILS_ROOT/.js_test_driver)
+    def config_dir
+      @config_dir ||= File.expand_path(".")
+    end
+
+    def save_fixtures
+      html_fixtures.each do |fixture|
+        path = fixture_file_name(fixture)
+        FileUtils.mkdir_p(File.dirname(path))
+        puts File.dirname(path)
+        File.open(path, "w+") do |f|
+          f.puts fixture.to_s
+        end
+      end
+    end
+
     private
+
+    def fixture_file_name(fixture)
+      File.expand_path(File.join(config_dir, "fixtures", fixture.namespace, "#{fixture.name}.js"))
+    end
+
+    def loaded_files
+      files = included_files + html_fixtures.collect { |fixture| fixture_file_name(fixture) }
+
+      map_paths(files)
+    end
+
+    def path_relative_to_config_dir(path)
+      source = File.expand_path(path).split(File::SEPARATOR)
+      config = File.expand_path(config_dir).split(File::SEPARATOR)
+
+      while source.first == config.first && !source.empty? && !config.empty?
+        source.shift
+        config.shift
+      end
+
+      parts = (['..'] * config.size) + source
+
+      return File.join(*parts)
+    end
+
+    def map_paths(files)
+      files.map{|file| path_relative_to_config_dir(file)}
+    end
 
     def attributes=(values)
       values.each do |attr, value|
