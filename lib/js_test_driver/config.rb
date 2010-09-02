@@ -59,6 +59,16 @@ module JsTestDriver
       html_fixtures << fixture
     end
 
+    # Includes the bundled with the gem jasmine js file and an adapter for jasmine
+    #
+    # There's no hacks or modifications here, so this method is just for the users convenience
+    def enable_jasmine
+      this_directory = File.dirname(__FILE__)
+      vendor_directory = File.expand_path(File.join('..', '..', 'vendor'), this_directory)
+      includes File.join(vendor_directory, "jasmine", "lib", "jasmine.js")
+      includes File.join(vendor_directory, "jasmine-jstd-adapter", "src", "*.js")
+    end
+
     # config variable which has a regular setter,
     # but also can be set by calling the "getter" with an argument
     # and if called without an argument the getter will return the passed block

@@ -42,6 +42,16 @@ htmlFixtures.all["foo/a"] // contents of the test/js/fixtures/foo/a.html
 
 You can customize the namespace and fixture container name:
 fixtures "test/js/fixtures", :name => "html", :namespace => "myApp"
+
+By default JsTestDriver comes with a pretty simple Test::Unit like testing framework.
+However it supports a couple of other frameworks, including Jasmine (http://pivotal.github.com/jasmine/), which
+is an RSpec-like BDD framework.
+
+If you want to user Jasmine, simply add:
+enable_jasmine
+
+in your config file, somewhere before including your test files and you are golden:)
+
 # the fixtures will be accessible through myApp.html["<fixture name goes here>"]
 
 This gem comes with 3 rake tasks:

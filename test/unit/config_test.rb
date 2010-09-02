@@ -210,5 +210,18 @@ module JsTestDriver
       end
     end
 
+    def test_enable_jasmine_adds_jasmine_and_jasmine_adapter
+      # given
+      config = given_an_empty_config
+
+      # when
+      config.enable_jasmine
+
+      # then
+      assert_equal 2, config.included_files.size
+      assert File.exists?(config.included_files[0])
+      assert Dir[config.included_files[1]].size > 0
+    end
+
   end
 end
