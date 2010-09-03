@@ -54,7 +54,7 @@ in your config file, somewhere before including your test files and you are gold
 
 # the fixtures will be accessible through myApp.html["<fixture name goes here>"]
 
-This gem comes with 3 rake tasks:
+This gem comes with some rake tasks:
 
 # start the js test driver server
 rake js_test_driver:start_server
@@ -64,5 +64,10 @@ rake js_test_driver:capture_browsers [BROWSERS=foo,bar,baz]
 
 # run the tests (all or the specified ones)
 rake js_test_driver:run_tests [TESTS=TestCase[.testMethod]]
+
+# will run the server, capture the browsers and run tests all in one command
+# this is mostly useful on CI, because it's much faster to run the server and capture the browsers once
+# and then run the tests again and again
+rake js_test_driver:run [TESTS=TestCase[.testMethod]] [BROWSERS=foo,bar,baz] [OUTPUT_XML=1 | OUTPUT_PATH=/some/dir] [CAPTURE_CONSOLE=1]
 
 You can add these tasks by requiring "js_test_driver/tasks"

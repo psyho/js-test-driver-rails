@@ -84,5 +84,13 @@ module JsTestDriver
       runner.capture_browsers('aaa,bbb')
     end
 
+    def test_should_run_with_all_arguments_at_once
+      runner = given_a_runner(:config => JsTestDriver::Config.new(:browsers => ['foo', 'bar', 'baz']))
+
+      expect_command_to_be_executed("java -jar #{runner.jar_path} --port 4224 --config #{runner.config_yml_path} --browser aaa,bbb --tests TestCase --testOutput #{File.expand_path('.js_test_driver')} --captureConsole")
+
+      runner.start_server_capture_and_run('TestCase', 'aaa,bbb', '.js_test_driver', true)
+    end
+
   end
 end

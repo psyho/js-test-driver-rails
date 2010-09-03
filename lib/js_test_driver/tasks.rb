@@ -17,4 +17,12 @@ namespace :js_test_driver do
     JsTestDriver::Runner.new.capture_browsers(ENV['BROWSERS'])
   end
 
+  desc "Starts the server, captures the browsers, runs the tests - all at the same time"
+  task :run do
+    config = JsTestDriver::Runner.new
+    output_path = ENV['OUTPUT_PATH']
+    output_path = config.generated_files_dir if ENV['OUTPUT_XML']
+    config.start_server_capture_and_run(ENV['TESTS'], ENV['BROWSERS'], output_path, ENV['CAPTURE_CONSOLE'])
+  end
+
 end

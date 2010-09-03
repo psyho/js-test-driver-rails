@@ -46,7 +46,11 @@ module JsTestDriver
 
     # starts the server on the default port specified in the config file
     def start_server
-      start_server_command.run
+      command = execute_jar
+
+      add_start_server(command)
+
+      command.run
     end
 
     # captures the browsers
@@ -54,7 +58,12 @@ module JsTestDriver
     # by default it will capture the browsers specified in the config,
     # but you can pass an argument like 'opera,chrome,firefox' to capture opera, chrome and firefox
     def capture_browsers(browsers = nil)
-      capture_browsers_command(browsers).run
+      command = execute_jar
+
+      add_with_config(command)
+      add_capture_browsers(command, browsers)
+
+      command.run
     end
 
     # runs the tests specified by the argument
@@ -63,33 +72,61 @@ module JsTestDriver
     # 'TestCase' or 'TestCase.test'
     # to run either a single test case or a single test
     def run_tests(tests = nil)
-      run_tests_command(tests).run  
+      command = execute_jar
+
+      add_with_config(command)
+      add_run_tests(command, tests)
+
+      command.run
+    end
+
+    def start_server_capture_and_run(tests, browsers, output_xml_path = nil, console = nil)
+      command = execute_jar
+
+      add_start_server(command)
+      add_with_config(command)
+      add_capture_browsers(command, browsers)
+      add_run_tests(command, tests)
+      add_output_directory(command, output_xml_path) if output_xml_path
+      add_capture_console(command) if console
+
+      command.run
+    end
+
+    def add_start_server(command)
+      command.option('--port', config.port)
+    end
+
+    def add_run_tests(command, tests)
+      command.option('--tests', tests || "all")
+    end
+
+    def add_capture_browsers(command, browsers)
+      browsers ||= config.browsers.join(',')
+      raise ArgumentError.new("No browsers defined!") if browsers == ""
+      command.option('--browser', browsers)
+    end
+
+    def add_output_directory(command, path)
+      path = File.expand_path(path)
+      FileUtils.mkdir_p(path) unless File.exists?(path)
+      command.option('--testOutput', path)
+    end
+
+    def add_capture_console(command)
+      command.option('--captureConsole')
+    end
+
+    def add_with_config(command)
+      save_config_file(config_yml_path)
+      command.option('--config', config_yml_path)
+    end
+
+    def execute_jar
+      Command.new('java').option('-jar', jar_path)
     end
 
     protected
-
-    def start_server_command
-      execute_jar_command.option('--port', config.port)
-    end
-
-    def run_tests_command(tests)
-      run_with_config.option('--tests', tests || "all") #.option('--runnerMode', 'DEBUG')
-    end
-
-    def capture_browsers_command(browsers)
-      browsers ||= config.browsers.join(',')
-      raise ArgumentError.new("No browsers defined!") if browsers == ""
-      run_with_config.option('--browser', browsers)
-    end
-
-    def run_with_config
-      save_config_file(config_yml_path)
-      execute_jar_command.option('--config', config_yml_path)
-    end
-
-    def execute_jar_command
-      Command.new('java').option('-jar', jar_path)
-    end
 
     def parse_config
       source = ""
