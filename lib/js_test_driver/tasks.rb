@@ -21,7 +21,7 @@ namespace :js_test_driver do
   task :run do
     config = JsTestDriver::Runner.new
     output_path = ENV['OUTPUT_PATH']
-    output_path = config.generated_files_dir if ENV['OUTPUT_XML']
+    output_path = File.join(config.generated_files_dir, 'tests') if ENV['OUTPUT_XML']
     config.start_server_capture_and_run(ENV['TESTS'], ENV['BROWSERS'], output_path, ENV['CAPTURE_CONSOLE'])
   end
 
