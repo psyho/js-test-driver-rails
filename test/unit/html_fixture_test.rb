@@ -55,7 +55,7 @@ module JsTestDriver
       fixture = fixture_named('foo', 'ns')
 
       # then
-      assert_contains "if (!ns) { ns = {}; }", fixture.to_s
+      assert_contains "if (typeof(ns) !== 'undefined') { ns = {}; }", fixture.to_s
     end
 
     def test_should_set_the_fixture
