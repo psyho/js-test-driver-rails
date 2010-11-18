@@ -19,7 +19,7 @@ module JsTestDriver
 
     def to_s
       <<JS
-if (typeof(#{namespace}) !== 'undefined') { #{namespace} = {}; }
+if (typeof(#{namespace}) === 'undefined') { #{namespace} = {}; }
 #{namespace}.#{name} = #{self.to_h.to_json};
 JS
     end
