@@ -141,7 +141,7 @@ module JsTestDriver
     end
 
     def default_config_path
-      root = defined?(RAILS_ROOT) ? RAILS_ROOT : '.'
+      root = defined?(::Rails) ? ::Rails.root.to_s : '.'
       return File.expand_path(File.join(root, 'config', 'js_test_driver.rb'))
     end
 
