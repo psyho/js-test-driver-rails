@@ -1,11 +1,13 @@
+PATH
+  remote: .
+  specs:
+    js-test-driver-rails (0.3.1)
+      json
+      rake
+
 GEM
   remote: http://rubygems.org/
   specs:
-    git (1.2.5)
-    jeweler (1.5.1)
-      bundler (~> 1.0.0)
-      git (>= 1.2.5)
-      rake
     json (1.4.6)
     mocha (0.9.9)
       rake
@@ -15,8 +17,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler
-  jeweler
-  json
+  js-test-driver-rails!
   mocha
-  rake

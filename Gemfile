@@ -1,7 +1,4 @@
 source "http://rubygems.org"
 
-gem "bundler"
-gem "jeweler"
-gem "mocha"
-gem "rake"
-gem "json"
+# Specify your gem's dependencies in js-test-driver-rails.gemspec
+gemspec

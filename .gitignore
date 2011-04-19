@@ -3,4 +3,3 @@
 .bundle
 jsTestDriver.conf
 pkg/*
-*.gemspec
