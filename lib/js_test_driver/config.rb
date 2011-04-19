@@ -22,7 +22,7 @@ module JsTestDriver
       end
     end
 
-    # Files specified here will not be loaded, it's useful when combined with globbing in includes 
+    # Files specified here will not be loaded, it's useful when combined with globbing in includes
     #
     # paths should be relative to root_dir
     def excludes(*paths)
@@ -35,7 +35,7 @@ module JsTestDriver
     #
     # This should be a string with no spaces (if you need to pass parameters to the browser you will
     # need to create a shell script ans put it's name here)
-    def browser(browsers)
+    def browser(*browsers)
       browsers.each do |browser|
         self.browsers << browser
       end
@@ -50,12 +50,12 @@ module JsTestDriver
     # namespace.name["file_name_without the html extension"]
     #
     # by default the namespace is called htmlFixtures
-    # and the fixture name is called all     
+    # and the fixture name is called all
     def fixtures(directory, opts = {})
       fixture = JsTestDriver::HtmlFixture.new(directory, opts[:name], opts[:namespace])
       if html_fixtures.detect{|f| f.name == fixture.name && f.namespace == fixture.namespace}
         raise ArgumentError.new("Fixture #{fixture.namespace}.#{fixture.name} already defined!")
-      end  
+      end
       html_fixtures << fixture
     end
 
@@ -186,7 +186,7 @@ module JsTestDriver
       values.each do |attr, value|
         self.send("#{attr}=", value)
       end
-    end 
+    end
 
   end
 end
