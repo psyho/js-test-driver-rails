@@ -7,3 +7,6 @@ Rake::TestTask.new("test") do |test|
 end
 
 task :default => :test
+
+require 'bundler'
+Bundler::GemHelper.install_tasks
