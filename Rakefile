@@ -33,3 +33,5 @@ Jeweler::GemcutterTasks.new
 Jeweler::RubyforgeTasks.new do |rubyforge|
   rubyforge.doc_task = "rdoc"
 end
+
+task :default => :test
