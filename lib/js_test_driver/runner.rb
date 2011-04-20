@@ -58,12 +58,15 @@ module JsTestDriver
     # by default it will capture the browsers specified in the config,
     # but you can pass an argument like 'opera,chrome,firefox' to capture opera, chrome and firefox
     def capture_browsers(browsers = nil)
-      command = execute_jar
+      browsers ||= ''
+      browsers = browsers.split(',')
+      browsers = config.browsers if browsers.empty?
 
-      add_with_config(command)
-      add_capture_browsers(command, browsers)
+      url = config.server + "/capture"
 
-      command.run
+      browsers.each do |browser|
+        spawn("#{browser} \'#{url}\'")
+      end
     end
 
     # runs the tests specified by the argument
@@ -171,11 +174,11 @@ module JsTestDriver
       values.each do |attr, value|
         self.send("#{attr}=", value)
       end
-    end    
+    end
 
     class Command
       def initialize(executable)
-        @command = "#{executable}"  
+        @command = "#{executable}"
       end
 
       def option(name, value = nil)

@@ -4,7 +4,7 @@ module JsTestDriver
   class RunnerTest < Test::Unit::TestCase
 
     def given_a_runner(opts = {})
-      return JsTestDriver::Runner.new(opts)  
+      return JsTestDriver::Runner.new(opts)
     end
 
     def test_should_have_default_config_path
@@ -35,6 +35,10 @@ module JsTestDriver
       JsTestDriver::Runner::Command.any_instance.expects(:system).with(cmd)
     end
 
+    def expect_spawn(cmd)
+      JsTestDriver::Runner.any_instance.expects(:spawn).with(cmd)
+    end
+
     def test_should_run_server_with_given_port_number
       config = JsTestDriver::Config.new(:port => 6666)
       runner = given_a_runner(:config => config)
@@ -60,18 +64,12 @@ module JsTestDriver
       runner.run_tests('MyTestCase.some_test')
     end
 
-    def test_should_raise_exception_if_no_browsers_defined_to_capture
-      runner = given_a_runner(:config => JsTestDriver::Config.new)
-
-      assert_raises(ArgumentError) do
-        runner.capture_browsers
-      end
-    end
-
     def test_should_capture_default_browsers
       runner = given_a_runner(:config => JsTestDriver::Config.new(:browsers => ['foo', 'bar', 'baz']))
 
-      expect_command_to_be_executed("java -jar #{runner.jar_path} --config #{runner.config_yml_path} --browser foo,bar,baz")
+      ['foo', 'bar', 'baz'].each do |browser|
+        expect_spawn("#{browser} 'http://localhost:4224/capture'")
+      end
 
       runner.capture_browsers
     end
@@ -79,7 +77,9 @@ module JsTestDriver
     def test_should_capture_given_browsers
       runner = given_a_runner(:config => JsTestDriver::Config.new(:browsers => ['foo', 'bar', 'baz']))
 
-      expect_command_to_be_executed("java -jar #{runner.jar_path} --config #{runner.config_yml_path} --browser aaa,bbb")
+      ['aaa', 'bbb'].each do |browser|
+        expect_spawn("#{browser} 'http://localhost:4224/capture'")
+      end
 
       runner.capture_browsers('aaa,bbb')
     end
