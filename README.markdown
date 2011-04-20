@@ -14,6 +14,7 @@ The file may contain following directives:
     # this is different from the JsTestDriver which does not allow you to use absolute paths in the config file 
 
     # files to be included
+    # you can use Ruby globbing syntax (spec/js/**/*_spec.js), which will be automatically expanded
     includes 'foo', 'bar', 'public/javascripts/*.js'
 
     # files to be excluded, useful with globbing
