@@ -100,6 +100,9 @@ module JsTestDriver
     # but you still need to specify port for starting the server
     define_config_variable(:server) { @server || "http://#{host}:#{port}" }
 
+    # the base path to which all of the paths in the config file are relative
+    define_config_variable(:base_path) { @base_path ||= '/' }
+
     def included_files
       @includes ||= []
     end
@@ -119,7 +122,7 @@ module JsTestDriver
     end
 
     def to_s
-      hash = {'server' => server}
+      hash = {'server' => server, 'basepath' => base_path}
       hash['load'] = loaded_files unless loaded_files.empty?
       hash['exclude'] = map_paths(excluded_files) unless excluded_files.empty?
       return hash.to_yaml
@@ -165,22 +168,12 @@ module JsTestDriver
       map_paths(files)
     end
 
-    def path_relative_to_config_dir(path)
-      source = File.expand_path(path).split(File::SEPARATOR)
-      config = File.expand_path(config_dir).split(File::SEPARATOR)
-
-      while source.first == config.first && !source.empty? && !config.empty?
-        source.shift
-        config.shift
-      end
-
-      parts = (['..'] * config.size) + source
-
-      return File.join(*parts)
+    def path_relative_to_base_path(path)
+      path.gsub(/^#{Regexp.escape(base_path)}/, '')
     end
 
     def map_paths(files)
-      files.map{|file| path_relative_to_config_dir(file)}
+      files.map{|file| path_relative_to_base_path(file)}
     end
 
     def attributes=(values)
