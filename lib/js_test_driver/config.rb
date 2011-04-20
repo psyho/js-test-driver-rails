@@ -17,18 +17,14 @@ module JsTestDriver
     #
     # JsTestDriver supports globbing
     def includes(*paths)
-      paths.each do |path|
-        self.included_files << File.expand_path(path)
-      end
+      self.included_files.concat(expand_globs(paths))
     end
 
     # Files specified here will not be loaded, it's useful when combined with globbing in includes
     #
     # paths should be relative to root_dir
     def excludes(*paths)
-      paths.each do |path|
-        self.excluded_files << File.expand_path(path)
-      end
+      self.excluded_files.concat(expand_globs(paths))
     end
 
     # Defines a browser to be captured by default
@@ -153,6 +149,11 @@ module JsTestDriver
     end
 
     private
+
+    def expand_globs(paths)
+      with_expanded_paths = paths.map{|path| File.expand_path(path)}
+      return with_expanded_paths.map{|path| path.include?('*') ? Dir[path] : path}.flatten
+    end
 
     def fixture_file_name(fixture)
       File.expand_path(File.join(config_dir, "fixtures", fixture.namespace, "#{fixture.name}.js"))

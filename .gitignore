@@ -3,3 +3,4 @@
 .bundle
 jsTestDriver.conf
 pkg/*
+tags

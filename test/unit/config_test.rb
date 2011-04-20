@@ -13,7 +13,7 @@ module JsTestDriver
     end
 
     def given_an_empty_config
-      JsTestDriver::Config.new  
+      JsTestDriver::Config.new
     end
 
     def test_empty_config
@@ -75,10 +75,21 @@ module JsTestDriver
       config = given_an_empty_config
 
       # when
-      config.includes('src/*.js')
+      config.includes('src/foo.js')
 
       # then
-      assert_config_includes config, 'load' => ['src/*.js']
+      assert_config_includes config, 'load' => ['src/foo.js']
+    end
+
+    def test_config_with_includes_with_globbing
+      # given
+      config = given_an_empty_config
+
+      # when
+      config.includes('test/fixtures/foo/**/*.html')
+
+      # then
+      assert_config_includes config, 'load' => ['test/fixtures/foo/bar/a.html', 'test/fixtures/foo/a.html']
     end
 
     def test_config_with_browsers
@@ -111,10 +122,21 @@ module JsTestDriver
       config = given_an_empty_config
 
       # when
-      config.excludes('src/*.js')
+      config.excludes('test/fixtures/foo/**/*.html')
 
       # then
-      assert_config_includes config, 'exclude' => ['src/*.js']
+      assert_config_includes config, 'exclude' => ['test/fixtures/foo/bar/a.html', 'test/fixtures/foo/a.html']
+    end
+
+    def test_config_with_excludes_with_globbing
+      # given
+      config = given_an_empty_config
+
+      # when
+      config.excludes('src/foo.js')
+
+      # then
+      assert_config_includes config, 'exclude' => ['src/foo.js']
     end
 
     def test_empty_config_file
@@ -167,7 +189,7 @@ module JsTestDriver
       config.config_dir = File.expand_path("configs")
 
       # when
-      config.fixtures "fixture/directory", :name => "fixture_name", :namespace => "fixture_namespace"      
+      config.fixtures "fixture/directory", :name => "fixture_name", :namespace => "fixture_namespace"
 
       # then
       assert_config_includes config, 'load' => ["fixtures/fixture_namespace/fixture_name.js"]
