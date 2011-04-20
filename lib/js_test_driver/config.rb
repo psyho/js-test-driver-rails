@@ -61,8 +61,8 @@ module JsTestDriver
     def enable_jasmine
       this_directory = File.dirname(__FILE__)
       vendor_directory = File.expand_path(File.join('..', '..', 'vendor'), this_directory)
-      includes File.join(vendor_directory, "jasmine", "lib", "jasmine.js")
-      includes File.join(vendor_directory, "jasmine-jstd-adapter", "src", "*.js")
+      includes File.join(vendor_directory, "jasmine.js")
+      includes File.join(vendor_directory, "JasmineAdapter.js")
     end
 
     # config variable which has a regular setter,
