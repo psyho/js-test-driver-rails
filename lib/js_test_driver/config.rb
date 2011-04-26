@@ -59,10 +59,27 @@ module JsTestDriver
     #
     # There's no hacks or modifications here, so this method is just for the users convenience
     def enable_jasmine
-      this_directory = File.dirname(__FILE__)
-      vendor_directory = File.expand_path(File.join('..', '..', 'vendor'), this_directory)
       includes File.join(vendor_directory, "jasmine.js")
       includes File.join(vendor_directory, "JasmineAdapter.js")
+    end
+
+    # Adds a JsTestDriver plugin for measuring coverage to the configuration
+    def measure_coverage
+      @measure_coverage = true
+      self.plugins << {
+        'name' => 'coverage',
+        'jar' => File.join(vendor_directory, 'coverage.jar'),
+        'module' => 'com.google.jstestdriver.coverage.CoverageModule'
+      }
+    end
+
+    def measure_coverage?
+      !!@measure_coverage
+    end
+
+    # Plugins to include in the config
+    def plugins
+      @plugins ||= []
     end
 
     # config variable which has a regular setter,
@@ -125,6 +142,7 @@ module JsTestDriver
       hash = {'server' => server, 'basepath' => base_path}
       hash['load'] = loaded_files unless loaded_files.empty?
       hash['exclude'] = map_paths(excluded_files) unless excluded_files.empty?
+      hash['plugin'] = plugins unless plugins.empty?
       return hash.to_yaml
     end
 
@@ -152,6 +170,11 @@ module JsTestDriver
     end
 
     private
+
+    def vendor_directory
+      this_directory = File.dirname(__FILE__)
+      return File.expand_path(File.join('..', '..', 'vendor'), this_directory)
+    end
 
     def expand_globs(paths)
       with_expanded_paths = paths.map{|path| File.expand_path(path)}

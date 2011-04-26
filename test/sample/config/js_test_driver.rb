@@ -5,6 +5,7 @@ includes 'test/sample/lib/*.js'
 end
 
 enable_jasmine
+measure_coverage
 
 includes 'test/sample/specs/spec_helper.js'
 includes 'test/sample/specs/**/*_spec.js'

@@ -92,5 +92,16 @@ module JsTestDriver
       runner.start_server_capture_and_run('TestCase', 'aaa,bbb', '.js_test_driver', true)
     end
 
+    def test_when_measuring_coverage
+      config = JsTestDriver::Config.new
+      config.measure_coverage
+      runner = given_a_runner(:config => config)
+
+      JsTestDriver::Runner::Command.any_instance.expects(:system)
+      runner.expects(:system).with("genhtml -o #{File.expand_path('.js_test_driver/coverage')} #{File.expand_path('.js_test_driver/jsTestDriver.conf-coverage.dat')}")
+
+      runner.start_server_capture_and_run(nil, 'aaa', '.js_test_driver')
+    end
+
   end
 end

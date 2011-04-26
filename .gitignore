@@ -4,3 +4,4 @@
 jsTestDriver.conf
 pkg/*
 tags
+.js_test_driver

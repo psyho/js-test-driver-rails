@@ -253,5 +253,18 @@ module JsTestDriver
       assert Dir[config.included_files[1]].size > 0
     end
 
+    def test_with_coverage_measuring_enabled
+      # given
+      config = given_an_empty_config
+
+      # when
+      config.measure_coverage
+
+      # then
+      assert_config_includes config, 'plugin' => [{'name' => 'coverage',
+        'jar' => File.expand_path('../../../vendor/coverage.jar', __FILE__),
+        'module' => 'com.google.jstestdriver.coverage.CoverageModule'}]
+    end
+
   end
 end

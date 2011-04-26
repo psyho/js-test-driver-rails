@@ -93,7 +93,13 @@ module JsTestDriver
       add_output_directory(command, output_xml_path) if output_xml_path
       add_capture_console(command) if console
 
-      command.run
+      result = command.run
+
+      if config.measure_coverage? && output_xml_path
+        generate_html_coverage_report(output_xml_path)
+      end
+
+      return result
     end
 
     def add_start_server(command)
@@ -129,7 +135,27 @@ module JsTestDriver
       Command.new('java').option('-jar', jar_path)
     end
 
+    def generate_html_coverage_report(output_path)
+      unless genhtml_installed?
+        puts "Could not find genhtml. You must install lcov (sudo apt-get install lcov)"
+        return
+      end
+
+      output_path = File.expand_path(output_path)
+
+      config_file_name = File.basename(config_yml_path)
+      coverage_file_name = config_file_name + '-coverage.dat'
+      coverage_file_path = File.join(output_path, coverage_file_name)
+      coverage_out_dir = File.join(output_path, 'coverage')
+
+      system("genhtml -o #{coverage_out_dir} #{coverage_file_path}")
+    end
+
     protected
+
+    def genhtml_installed?
+      !%x[which genhtml].strip.empty?
+    end
 
     def parse_config
       source = ""
