@@ -89,7 +89,7 @@ You need to have lcov installed for the HTML report to be generated:
 
     sudo apt-get install lcov
 
-The HTML coverage report will be saved in the .js_test_driver/coverage directory.
+The HTML coverage report will be saved in the .js_test_driver/tests/coverage directory.
 
 Rake tasks
 ----------
