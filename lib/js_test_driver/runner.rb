@@ -83,7 +83,7 @@ module JsTestDriver
       command.run
     end
 
-    def start_server_capture_and_run(tests, browsers, output_xml_path = nil, console = nil)
+    def start_server_capture_and_run(tests = nil, browsers = nil, output_xml_path = nil, console = nil)
       command = execute_jar
 
       add_start_server(command)
