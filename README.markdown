@@ -76,6 +76,21 @@ If you want to user Jasmine, simply add:
 
 in your config file, somewhere before including your test files and you are golden:)
 
+Measuring code coverage
+-----------------------
+
+JsTestDriver has a pretty cool feature of being able to measure code coverage. To enable this in your config, you just need to add:
+
+    measure_coverage
+
+in your config file.
+
+You need to have lcov installed for the HTML report to be generated:
+
+    sudo apt-get install lcov
+
+The HTML coverage report will be saved in the .js_test_driver/coverage directory.
+
 Rake tasks
 ----------
 
