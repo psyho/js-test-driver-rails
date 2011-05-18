@@ -12,7 +12,7 @@ module JsTestDriver
     end
 
     def paths(arr)
-      arr.map{|s| path(s)}
+      arr.map{|s| path(s)}.sort
     end
 
     def assert_config_includes(config, hash)
@@ -188,7 +188,7 @@ module JsTestDriver
       config.includes "a/a", "/b/b", "../c"
 
       # then
-      assert_config_includes config, 'load' => paths(["a/a", '/b/b', "../c"])
+      assert_config_includes config, 'load' => ["a/a", '/b/b', "../c"].map{|p| path(p)}
     end
 
     def test_config_with_html_fixtures

@@ -178,7 +178,7 @@ module JsTestDriver
 
     def expand_globs(paths)
       with_expanded_paths = paths.map{|path| File.expand_path(path)}
-      return with_expanded_paths.map{|path| path.include?('*') ? Dir[path] : path}.flatten
+      return with_expanded_paths.map{|path| path.include?('*') ? Dir[path].sort : path}.flatten
     end
 
     def fixture_file_name(fixture)

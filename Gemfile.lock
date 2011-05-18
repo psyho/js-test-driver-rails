@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    js-test-driver-rails (0.3.4)
+    js-test-driver-rails (0.4.2)
       json
       rake
 
