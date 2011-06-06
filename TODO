@@ -1,0 +1,5 @@
+* add remote/selenium browser runner
+* add output coloring
+* add simple watchr integration
+* replace rake tasks with commandline runner
+* implement own output formatter (based on Eclipse/IntelliJ plugins)
