@@ -159,6 +159,12 @@ module JsTestDriver
       @config_dir ||= File.expand_path(".")
     end
 
+    def save(path)
+      FileUtils.mkdir_p(File.dirname(path))
+      File.open(path, "w+") { |f| f.puts self.to_s }
+      save_fixtures
+    end
+
     def save_fixtures
       html_fixtures.each do |fixture|
         path = fixture_file_name(fixture)
