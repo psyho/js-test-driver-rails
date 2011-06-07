@@ -3,22 +3,22 @@ module JsTestDriver
 
     class JstdJarCommand < BaseCommand
 
-      attr_reader :runtime_config
+      attr_reader :runtime_config, :config
 
-      def initialize(runtime_config)
+      def initialize(runtime_config, config)
         super('java')
         @runtime_config = runtime_config
+        @config = config
 
         option('-jar', runtime_config.jar_path)
       end
 
       def with_config
-        runtime_config.config.save(runtime_config.config_yml_path)
         return option('--config', runtime_config.config_yml_path)
       end
 
       def start_server
-        return option('--port', runtime_config.config.port)
+        return option('--port', config.port)
       end
 
       def run_tests(tests = nil)
@@ -26,7 +26,7 @@ module JsTestDriver
       end
 
       def capture_browsers(browsers = nil)
-        browsers ||= runtime_config.config.browsers.join(',')
+        browsers ||= config.browsers.join(',')
         raise ArgumentError.new("No browsers defined!") if browsers == ""
         return option('--browser', browsers)
       end
@@ -41,6 +41,17 @@ module JsTestDriver
         return option('--captureConsole')
       end
 
+      def verbose
+        return option('--verbose')
+      end
+
+      def runner_mode(mode)
+        return option('--runnerMode', mode)
+      end
+
+      def browser_timeout(timeout)
+        return option('--browserTimeout', timeout)
+      end
     end
 
   end
