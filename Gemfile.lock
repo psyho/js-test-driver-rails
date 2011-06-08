@@ -2,13 +2,17 @@ PATH
   remote: .
   specs:
     js-test-driver-rails (0.4.3)
+      commander
       json
       rake
 
 GEM
   remote: http://rubygems.org/
   specs:
-    json (1.4.6)
+    commander (4.0.4)
+      highline (>= 1.5.0)
+    highline (1.6.2)
+    json (1.5.1)
     mocha (0.9.9)
       rake
     rake (0.8.7)

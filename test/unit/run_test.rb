@@ -9,7 +9,7 @@ module JsTestDriver
 
       application.run(:tests => 'TestCase',
                       :browsers => 'aaa,bbb',
-                      :output_xml_path => '.js_test_driver',
+                      :test_output => '.js_test_driver',
                       :capture_console => true)
 
       assert_run("java -jar #{runtime_config.jar_path} --port 4224 --config #{runtime_config.config_yml_path} --browser aaa,bbb --tests TestCase --testOutput #{File.expand_path('.js_test_driver')} --captureConsole")
@@ -19,7 +19,7 @@ module JsTestDriver
       config.measure_coverage
       config.browser 'foo'
 
-      application.run(:output_xml_path => '.js_test_driver')
+      application.run(:test_output => '.js_test_driver')
 
       assert_run("genhtml -o #{File.expand_path('.js_test_driver/coverage')} #{File.expand_path('.js_test_driver/jsTestDriver.conf-coverage.dat')}")
     end

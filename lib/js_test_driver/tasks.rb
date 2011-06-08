@@ -26,7 +26,7 @@ namespace :js_test_driver do
 
     exit(1) unless app.run(:tests => ENV['TESTS'],
                            :browsers => ENV['BROWSERS'],
-                           :output_xml_path => output_path,
+                           :test_output => output_path,
                            :capture_console => ENV['CAPTURE_CONSOLE'])
   end
 

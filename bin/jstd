@@ -1,0 +1,73 @@
+#!/usr/bin/env ruby
+
+$:.push File.expand_path("../../lib", __FILE__)
+
+require 'js_test_driver'
+
+require 'commander/import'
+
+def browser_option(c)
+  c.option '-b', '--browsers STRING', String, 'Comma-separated list of browsers to capture'
+end
+
+def tests_option(c)
+  c.option '-t', '--tests STRING', String, 'Test cases to run, defaults to all'
+end
+
+program :name, 'JS Test Driver'
+program :version, JsTestDriver::VERSION
+program :description, 'A Ruby Wrapper for Google js-test-driver'
+
+runtime_opts = {}
+
+global_option('-c', '--config FILE', 'path to Ruby configuration file') do |file|
+  runtime_opts[:config_path] = file
+end
+
+command :'start server' do |c|
+  c.description = 'Starts the js-test-driver server'
+  c.syntax = 'jstd [--config FILE] start server'
+
+  c.action do |args, opts|
+    JsTestDriver::Application.new(runtime_opts).start_server(opts.__hash__)
+  end
+end
+
+command :'capture browsers' do |c|
+  c.description = 'captures all the defined browsers in strict mode'
+  c.syntax = 'jstd [--config FILE] capture browsers [OPTIONS]'
+
+  browser_option(c)
+
+  c.action do |args, opts|
+    JsTestDriver::Application.new(runtime_opts).capture_browsers(opts.__hash__)
+  end
+end
+
+command :'run tests' do |c|
+  c.description = 'Runs the defined tests in an already running server'
+  c.syntax = 'jstd [--config FILE] run tests [OPTIONS]'
+
+  tests_option(c)
+
+  c.action do |args, opts|
+    JsTestDriver::Application.new(runtime_opts).run_tests(opts.__hash__)
+  end
+end
+
+command :run do |c|
+  c.description = 'Starts the server, captures browsers and runs tests'
+  c.syntax = 'jstd [--config FILE] run [OPTIONS]'
+
+  browser_option(c)
+  tests_option(c)
+  c.option '--test-output STRING', 'directory to which the results will be serialized as XML'
+  c.option '--[no-]capture-console', 'capture browser console'
+  c.option '--[no-]verbose', 'verbose test output'
+  c.option '--runner-mode STRING', 'change runner mode to output more information'
+  c.option '--browser-timeout INT', Integer, 'number of seconds after which a browser is considered dead'
+
+  c.action do |args, opts|
+    JsTestDriver::Application.new(runtime_opts).run(opts.__hash__)
+  end
+end
