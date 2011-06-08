@@ -3,3 +3,4 @@
 * add simple watchr integration
 * replace rake tasks with commandline runner
 * implement own output formatter (based on Eclipse/IntelliJ plugins)
+* clean up the whole test-output situation
