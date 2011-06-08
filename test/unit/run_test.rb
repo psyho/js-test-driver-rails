@@ -11,7 +11,7 @@ module JsTestDriver
                       :output_xml => true,
                       :capture_console => true)
 
-      assert_run("java -jar #{runtime_config.jar_path} --port 4224 --config #{runtime_config.config_yml_path} --browser aaa,bbb --tests TestCase --testOutput #{runtime_config.test_xml_data_path} --captureConsole")
+      assert_run("java -jar #{runtime_config.jar_path} --serverHandlerPrefix jstd --port 4224 --config #{runtime_config.config_yml_path} --browser aaa,bbb --tests TestCase --testOutput #{runtime_config.test_xml_data_path} --captureConsole")
     end
 
     def test_when_measuring_coverage

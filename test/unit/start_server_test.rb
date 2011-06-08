@@ -8,7 +8,7 @@ module JsTestDriver
 
       application.start_server
 
-      assert_run("java -jar #{runtime_config.jar_path} --port #{config.port}")
+      assert_run("java -jar #{runtime_config.jar_path} --serverHandlerPrefix jstd --port #{config.port}")
     end
 
   end

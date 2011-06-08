@@ -11,6 +11,7 @@ module JsTestDriver
         @config = config
 
         option('-jar', runtime_config.jar_path)
+        option('--serverHandlerPrefix', 'jstd')
       end
 
       def with_config
