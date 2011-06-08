@@ -45,6 +45,34 @@ module JsTestDriver
       file(@tmp_path ||= default_config_yml_path)
     end
 
+    # This is the directory where the coverage HTML files will be saved
+    attr_writer :coverage_files_path
+
+    def coverage_files_path
+      dir(@coverage_files_path ||= default_coverage_files_path)
+    end
+
+    # This is the file in which js-test-driver saves coverage data
+    # it is not configurable
+    def coverage_data_file
+      file_name = File.basename(config_yml_path + '-coverage.dat')
+      return file(file_name, test_xml_data_path)
+    end
+
+    # This is where the XML files with test results will be saved
+    attr_writer :test_xml_data_path
+
+    def test_xml_data_path
+      dir(@test_xml_data_path ||= default_test_xml_data_path)
+    end
+
+    # This is where the fixtures will be saved
+    attr_writer :fixture_dir
+
+    def fixture_dir
+      dir(@fixture_dir ||= default_fixture_dir)
+    end
+
     protected
 
     def parse_config
@@ -56,7 +84,9 @@ module JsTestDriver
       end
       config = JsTestDriver::Config.parse(source)
       config.config_dir = generated_files_dir
-      config.save(config_yml_path)
+      config.fixture_dir = fixture_dir
+      save_config(config)
+      save_fixtures(config)
       return config
     end
 
@@ -76,7 +106,33 @@ module JsTestDriver
     end
 
     def default_generated_files_dir
-      return file(".js_test_driver")
+      return dir(".js_test_driver")
+    end
+
+    def default_coverage_files_path
+      return dir('coverage', generated_files_dir)
+    end
+
+    def default_test_xml_data_path
+      return dir('tests', generated_files_dir)
+    end
+
+    def default_fixture_dir
+      return dir('fixtures', generated_files_dir)
+    end
+
+    def save_config(config)
+      config_yml_path
+      File.open(config_yml_path, "w+") { |f| f.puts config.to_s }
+    end
+
+    def save_fixtures(config)
+      config.html_fixtures.each do |fixture|
+        path = fixture_file_name(fixture)
+        File.open(path, "w+") do |f|
+          f.puts fixture.to_s
+        end
+      end
     end
 
     private

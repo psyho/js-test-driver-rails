@@ -203,23 +203,6 @@ module JsTestDriver
       assert_config_includes config, 'load' => paths(["configs/fixtures/fixture_namespace/fixture_name.js"])
     end
 
-    def test_should_save_fixtures
-      # given
-      config = given_an_empty_config
-      config.config_dir = "tmp/stuff"
-      config.fixtures fixture_dir, :name => "fixture_name", :namespace => "fixture_namespace"
-
-      # when
-      config.save_fixtures
-
-      # then
-      name = "tmp/stuff/fixtures/fixture_namespace/fixture_name.js"
-      assert File.exists?(name)
-      assert_equal File.read(name), config.html_fixtures.first.to_s
-    ensure
-      FileUtils.rm_rf("tmp/stuff")
-    end
-
     def test_should_raise_argument_error_if_the_same_fixture_defined_twice
       # given
       config = given_an_empty_config

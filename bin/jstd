@@ -62,7 +62,7 @@ command :run do |c|
 
   browser_option(c)
   tests_option(c)
-  c.option '--test-output STRING', 'directory to which the results will be serialized as XML'
+  c.option '--[no-]output-xml', 'output test results in JUnit xml format'
   c.option '--[no-]capture-console', 'capture browser console'
   c.option '--[no-]verbose', 'verbose test output'
   c.option '--runner-mode STRING', 'change runner mode to output more information'

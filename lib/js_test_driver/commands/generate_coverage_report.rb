@@ -7,25 +7,8 @@ module JsTestDriver
 
       def initialize(runtime_config)
         super('genhtml')
-        @runtime_config = runtime_config
-      end
-
-      def output_path(value)
-        value = File.expand_path(value)
-        option('-o', output_dir(value))
-        arg(data_file_path(value))
-      end
-
-      protected
-
-      def output_dir(output_path)
-        File.join(output_path, 'coverage')
-      end
-
-      def data_file_path(output_path)
-        config_path = File.basename(runtime_config.config_yml_path)
-        file_name = config_path + '-coverage.dat'
-        File.join(output_path, file_name)
+        option('-o', runtime_config.coverage_files_path)
+        arg(runtime_config.coverage_data_file)
       end
 
     end

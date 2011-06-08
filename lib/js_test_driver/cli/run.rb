@@ -27,7 +27,7 @@ module JsTestDriver
           .capture_browsers(opts[:browsers])
           .run_tests(opts[:tests])
 
-        command.output_directory(opts[:test_output]) if opts[:test_output]
+        command.output_xml if opts[:output_xml]
         command.capture_console if opts[:capture_console]
         command.verbose if opts[:verbose]
         command.run_mode(opts[:runner_mode]) if opts[:runner_mode]
@@ -37,10 +37,10 @@ module JsTestDriver
       end
 
       def generate_coverage_report(opts)
-        return unless config.measure_coverage? && opts[:test_output]
+        return unless config.measure_coverage? && opts[:output_xml]
 
         if genhtml_installed?
-          runner.run(coverage_command.output_path(opts[:test_output]).to_s)
+          runner.run(coverage_command.to_s)
         else
           puts "Could not find genhtml. You must install lcov (sudo apt-get install lcov)"
         end

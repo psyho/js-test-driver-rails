@@ -159,20 +159,15 @@ module JsTestDriver
       @config_dir ||= File.expand_path(".")
     end
 
-    def save(path)
-      FileUtils.mkdir_p(File.dirname(path))
-      File.open(path, "w+") { |f| f.puts self.to_s }
-      save_fixtures
+    attr_writer :fixture_dir
+
+    # this is where the config files are saved (ex. RAILS_ROOT/.js_test_driver/fixtures)
+    def fixture_dir
+      @fixture_dir ||= File.join(config_dir, 'fixtures')
     end
 
-    def save_fixtures
-      html_fixtures.each do |fixture|
-        path = fixture_file_name(fixture)
-        FileUtils.mkdir_p(File.dirname(path))
-        File.open(path, "w+") do |f|
-          f.puts fixture.to_s
-        end
-      end
+    def fixture_file_name(fixture)
+      File.join(fixture_dir, fixture.namespace, "#{fixture.name}.js")
     end
 
     private
@@ -185,10 +180,6 @@ module JsTestDriver
     def expand_globs(paths)
       with_expanded_paths = paths.map{|path| File.expand_path(path)}
       return with_expanded_paths.map{|path| path.include?('*') ? Dir[path].sort : path}.flatten
-    end
-
-    def fixture_file_name(fixture)
-      File.expand_path(File.join(config_dir, "fixtures", fixture.namespace, "#{fixture.name}.js"))
     end
 
     def loaded_files

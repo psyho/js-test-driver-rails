@@ -32,9 +32,11 @@ module JsTestDriver
       end
 
       def output_directory(path)
-        path = File.expand_path(path)
-        FileUtils.mkdir_p(path) unless File.exists?(path)
         return option('--testOutput', path)
+      end
+
+      def output_xml
+        return output_directory(runtime_config.test_xml_data_path)
       end
 
       def capture_console

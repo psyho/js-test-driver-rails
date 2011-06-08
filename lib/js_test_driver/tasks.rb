@@ -21,12 +21,9 @@ namespace :js_test_driver do
   task :run do
     app = JsTestDriver::Application.new
 
-    output_path = ENV['OUTPUT_PATH']
-    output_path = File.join(app.config.generated_files_dir, 'tests') if ENV['OUTPUT_XML']
-
     exit(1) unless app.run(:tests => ENV['TESTS'],
                            :browsers => ENV['BROWSERS'],
-                           :test_output => output_path,
+                           :output_xml => !!ENV['OUTPUT_XML'],
                            :capture_console => ENV['CAPTURE_CONSOLE'])
   end
 

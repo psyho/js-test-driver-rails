@@ -39,9 +39,12 @@ class Test::Unit::TestCase
   attr_reader :application, :runner
 
   def setup
-    @application = JsTestDriver::Application.new
+    @application = JsTestDriver::Application.new(:config => JsTestDriver::Config.new)
     @runner = FakeRunner.new
     @application.stubs(:runner => @runner)
+  end
+
+  def teardown
     clean_up_saved_config_files
   end
 
