@@ -5,6 +5,7 @@ require 'fileutils'
 module JsTestDriver
   autoload :Application, 'js_test_driver/application'
   autoload :Config, 'js_test_driver/config'
+  autoload :ConfigFactory, 'js_test_driver/config_factory'
   autoload :HtmlFixture, 'js_test_driver/html_fixture'
   autoload :MissingDependencyError, 'js_test_driver/missing_dependency_error'
   autoload :Runner, 'js_test_driver/runner'

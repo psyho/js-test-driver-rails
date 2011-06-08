@@ -6,6 +6,7 @@ module JsTestDriver
 
     def initialize(opts = {})
       @runtime_config = JsTestDriver::RuntimeConfig.new(opts)
+      @runtime_config.config_factory = config_factory
     end
 
     def config
@@ -26,6 +27,10 @@ module JsTestDriver
 
     def run(opts = {})
       JsTestDriver::CLI::Run.new(jstd_jar_command, runner, config, coverage_command).run(opts)
+    end
+
+    def config_factory
+      JsTestDriver::ConfigFactory.new(runtime_config)
     end
 
     protected

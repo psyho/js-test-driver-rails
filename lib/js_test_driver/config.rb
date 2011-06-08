@@ -9,7 +9,8 @@ module JsTestDriver
   # user a significant amount of freedom in terms of what is and is not loaded, and so on
   class Config
 
-    def initialize(attributes = {})
+    def initialize(runtime_config, attributes = {})
+      @runtime_config = runtime_config
       self.attributes = attributes
     end
 
@@ -156,31 +157,38 @@ module JsTestDriver
       return hash.to_yaml
     end
 
-    def self.parse(string)
-      config = new
-      config.instance_eval(string)
-      return config
-    end
-
-    attr_writer :config_dir
-
     # this is where the config files are saved (ex. RAILS_ROOT/.js_test_driver)
     def config_dir
-      @config_dir ||= File.expand_path(".")
+      runtime_config.generated_files_dir
     end
-
-    attr_writer :fixture_dir
 
     # this is where the config files are saved (ex. RAILS_ROOT/.js_test_driver/fixtures)
     def fixture_dir
-      @fixture_dir ||= File.join(config_dir, 'fixtures')
+      runtime_config.fixture_dir
+    end
+
+    def save
+      File.open(runtime_config.config_yml_path, "w+") { |f| f.puts self.to_s }
+      save_fixtures
+      return self
+    end
+
+    private
+
+    attr_reader :runtime_config
+
+    def save_fixtures
+      html_fixtures.each do |fixture|
+        path = fixture_file_name(fixture)
+        File.open(path, "w+") do |f|
+          f.puts fixture.to_s
+        end
+      end
     end
 
     def fixture_file_name(fixture)
       File.join(fixture_dir, fixture.namespace, "#{fixture.name}.js")
     end
-
-    private
 
     def vendor_directory
       this_directory = File.dirname(__FILE__)

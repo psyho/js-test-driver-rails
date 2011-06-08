@@ -21,7 +21,7 @@ module JsTestDriver
     end
 
     def given_an_empty_config
-      JsTestDriver::Config.new
+      application.config_factory.new
     end
 
     def test_empty_config
@@ -152,7 +152,7 @@ module JsTestDriver
       str = ""
 
       # when
-      config = JsTestDriver::Config.parse(str)
+      config = application.config_factory.parse(str)
 
       # then
       assert_equal [], config.included_files
@@ -172,7 +172,7 @@ module JsTestDriver
       CONFIG
 
       # when
-      config = JsTestDriver::Config.parse(str)
+      config = application.config_factory.parse(str)
 
       # then
       assert_equal ['a', 'b', 'c'].map{|p| File.expand_path(p)}, config.included_files
@@ -183,8 +183,6 @@ module JsTestDriver
     def test_given_a_config_path_should_expand_the_includes
       # given
       config = given_an_empty_config
-      config.config_dir = "/foo/bbb/ccc"
-      pwd = File.expand_path('.')
       config.includes "a/a", "/b/b", "../c"
 
       # then
@@ -194,7 +192,7 @@ module JsTestDriver
     def test_config_with_html_fixtures
       # given
       config = given_an_empty_config
-      config.config_dir = File.expand_path("configs")
+      runtime_config.generated_files_dir = File.expand_path("configs")
 
       # when
       config.fixtures "fixture/directory", :name => "fixture_name", :namespace => "fixture_namespace"

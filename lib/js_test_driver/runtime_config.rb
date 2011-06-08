@@ -7,6 +7,8 @@ module JsTestDriver
       self.attributes = attributes
     end
 
+    attr_accessor :config_factory
+
     # configuration, by default it's parsed from config_path
     attr_writer :config
 
@@ -82,12 +84,7 @@ module JsTestDriver
       else
         warn("Could not find JS Test Driver config: '#{config_path}', assuming empty config file!")
       end
-      config = JsTestDriver::Config.parse(source)
-      config.config_dir = generated_files_dir
-      config.fixture_dir = fixture_dir
-      save_config(config)
-      save_fixtures(config)
-      return config
+      return config_factory.parse(source).save
     end
 
     def default_config_path
@@ -119,20 +116,6 @@ module JsTestDriver
 
     def default_fixture_dir
       return dir('fixtures', generated_files_dir)
-    end
-
-    def save_config(config)
-      config_yml_path
-      File.open(config_yml_path, "w+") { |f| f.puts config.to_s }
-    end
-
-    def save_fixtures(config)
-      config.html_fixtures.each do |fixture|
-        path = fixture_file_name(fixture)
-        File.open(path, "w+") do |f|
-          f.puts fixture.to_s
-        end
-      end
     end
 
     private
