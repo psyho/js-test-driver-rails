@@ -17,6 +17,7 @@ end
 program :name, 'JS Test Driver'
 program :version, JsTestDriver::VERSION
 program :description, 'A Ruby Wrapper for Google js-test-driver'
+program :help, 'Author', 'Adam Pohorecki <adam@pohorecki.pl>'
 
 runtime_opts = {}
 
