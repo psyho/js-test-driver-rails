@@ -38,6 +38,16 @@ module JsTestDriver
       end
     end
 
+    # This allows you to control browsers on remote machines with Selenium
+    # To be able to use this, the remote server has to be running selenium-server
+    #
+    # Available options are: host and browser (as in WebDriver::Remote::Capabilities)
+    def remote_browser(host, opts = {})
+      remote_browser = JsTestDriver::RemoteBrowser.new(host, opts)
+      remote_browsers << remote_browser
+      browser remote_browser_file_name(remote_browser.name)
+    end
+
     # Defines a HTML fixture directory
     #
     # the first argument is the directory to scan for html fixtures
@@ -86,6 +96,16 @@ module JsTestDriver
     # Plugins to include in the config
     def plugins
       @plugins ||= []
+    end
+
+    def guess_local_ip
+      orig, Socket.do_not_reverse_lookup = Socket.do_not_reverse_lookup, true  # turn off reverse DNS resolution temporarily
+      UDPSocket.open do |s|
+        s.connect '64.233.187.99', 1
+        return s.addr.last
+      end
+    ensure
+      Socket.do_not_reverse_lookup = orig
     end
 
     # config variable which has a regular setter,
@@ -148,6 +168,12 @@ module JsTestDriver
       @browsers ||= []
     end
 
+    attr_writer :remote_browsers
+
+    def remote_browsers
+      @remote_browsers ||= []
+    end
+
     def to_s
       hash = {'server' => server, 'basepath' => base_path}
       hash['load'] = loaded_files unless loaded_files.empty?
@@ -170,6 +196,7 @@ module JsTestDriver
     def save
       File.open(runtime_config.config_yml_path, "w+") { |f| f.puts self.to_s }
       save_fixtures
+      save_remote_browsers
       return self
     end
 
@@ -186,8 +213,22 @@ module JsTestDriver
       end
     end
 
+    def save_remote_browsers
+      remote_browsers.each do |browser|
+        path = remote_browser_file_name(browser.name)
+        File.open(path, "w+") do |f|
+          f.puts browser.to_s
+        end
+        File.chmod(0755, path)
+      end
+    end
+
     def fixture_file_name(fixture)
       File.join(fixture_dir, fixture.namespace, "#{fixture.name}.js")
+    end
+
+    def remote_browser_file_name(name)
+      File.join(runtime_config.remote_browsers_dir, name)
     end
 
     def vendor_directory

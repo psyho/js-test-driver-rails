@@ -5,17 +5,28 @@ PATH
       commander
       json
       rake
+      selenium-webdriver
 
 GEM
   remote: http://rubygems.org/
   specs:
+    childprocess (0.1.9)
+      ffi (~> 1.0.6)
     commander (4.0.4)
       highline (>= 1.5.0)
+    ffi (1.0.9)
     highline (1.6.2)
     json (1.5.1)
+    json_pure (1.5.1)
     mocha (0.9.9)
       rake
     rake (0.8.7)
+    rubyzip (0.9.4)
+    selenium-webdriver (0.2.1)
+      childprocess (>= 0.1.7)
+      ffi (>= 1.0.7)
+      json_pure
+      rubyzip
 
 PLATFORMS
   ruby

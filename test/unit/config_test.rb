@@ -262,5 +262,17 @@ module JsTestDriver
       ]
     end
 
+    def test_config_with_remote_browsers
+      # given
+      config = given_an_empty_config
+
+      # when
+      config.browser 'foo'
+      config.remote_browser('192.168.1.12:4444', :browser => :internet_explorer)
+
+      # then
+      assert_equal ['foo', File.join(runtime_config.remote_browsers_dir, 'remote-browser-192.168.1.12:4444-internet_explorer.rb')], config.browsers
+    end
+
   end
 end

@@ -2,12 +2,15 @@ require 'json'
 require 'yaml'
 require 'fileutils'
 
+require 'selenium-webdriver'
+
 module JsTestDriver
   autoload :Application, 'js_test_driver/application'
   autoload :Config, 'js_test_driver/config'
   autoload :ConfigFactory, 'js_test_driver/config_factory'
   autoload :HtmlFixture, 'js_test_driver/html_fixture'
   autoload :MissingDependencyError, 'js_test_driver/missing_dependency_error'
+  autoload :RemoteBrowser, 'js_test_driver/remote_browser'
   autoload :Runner, 'js_test_driver/runner'
   autoload :RuntimeConfig, 'js_test_driver/runtime_config'
   autoload :VERSION, 'js_test_driver/version'

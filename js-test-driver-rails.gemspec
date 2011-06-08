@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'json'
   s.add_dependency 'rake'
   s.add_dependency 'commander'
+  s.add_dependency 'selenium-webdriver'
   s.add_development_dependency 'mocha'
 
   s.files         = `git ls-files`.split("\n")

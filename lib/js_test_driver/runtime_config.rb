@@ -75,6 +75,13 @@ module JsTestDriver
       dir(@fixture_dir ||= default_fixture_dir)
     end
 
+    # This is where the remote browser scripts will be saved
+    attr_writer :remote_browsers_dir
+
+    def remote_browsers_dir
+      dir(@remote_browsers_dir ||= default_remote_browsers_dir)
+    end
+
     protected
 
     def parse_config
@@ -116,6 +123,10 @@ module JsTestDriver
 
     def default_fixture_dir
       return dir('fixtures', generated_files_dir)
+    end
+
+    def default_remote_browsers_dir
+      return dir('browsers', generated_files_dir)
     end
 
     private
