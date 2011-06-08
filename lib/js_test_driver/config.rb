@@ -73,6 +73,11 @@ module JsTestDriver
       }
     end
 
+    # Adds a proxy matcher to configuration. This can be used for integration testing.
+    def proxy(pattern)
+      return Proxy.new(pattern, proxies)
+    end
+
     def measure_coverage?
       !!@measure_coverage
     end
@@ -132,6 +137,10 @@ module JsTestDriver
       @html_fixtures ||= []
     end
 
+    def proxies
+      @proxies ||= []
+    end
+
     attr_writer :browsers
 
     def browsers
@@ -143,6 +152,7 @@ module JsTestDriver
       hash['load'] = loaded_files unless loaded_files.empty?
       hash['exclude'] = map_paths(excluded_files) unless excluded_files.empty?
       hash['plugin'] = plugins unless plugins.empty?
+      hash['proxy'] = proxies unless proxies.empty?
       return hash.to_yaml
     end
 
@@ -199,6 +209,19 @@ module JsTestDriver
     def attributes=(values)
       values.each do |attr, value|
         self.send("#{attr}=", value)
+      end
+    end
+
+    class Proxy
+      attr_reader :pattern, :proxies
+
+      def initialize(pattern, proxies)
+        @pattern = pattern
+        @proxies = proxies
+      end
+
+      def to(server)
+        self.proxies << {'matcher' => pattern, 'server' => server}
       end
     end
 

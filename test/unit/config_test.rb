@@ -249,5 +249,20 @@ module JsTestDriver
         'module' => 'com.google.jstestdriver.coverage.CoverageModule'}]
     end
 
+    def test_with_proxies
+      # given
+      config = given_an_empty_config
+
+      # when
+      config.proxy('/hello/*').to('http://localhost:3111')
+      config.proxy('*').to('http://localhost:3222')
+
+      # then
+      assert_config_includes config, 'proxy' => [
+        {'matcher' => '/hello/*', 'server' => 'http://localhost:3111'},
+        {'matcher' => '*', 'server' => 'http://localhost:3222'}
+      ]
+    end
+
   end
 end
