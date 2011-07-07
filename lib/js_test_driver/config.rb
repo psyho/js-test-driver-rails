@@ -179,8 +179,14 @@ module JsTestDriver
       hash['load'] = loaded_files unless loaded_files.empty?
       hash['exclude'] = map_paths(excluded_files) unless excluded_files.empty?
       hash['plugin'] = plugins unless plugins.empty?
-      hash['proxy'] = proxies unless proxies.empty?
-      return hash.to_yaml
+      text = hash.to_yaml
+      unless proxies.empty?
+        text << "proxy:\n"
+        proxies.each do |proxy|
+          text << "- {matcher: \"#{proxy['matcher']}\", server: \"#{proxy['server']}\"}\n"
+        end
+      end
+      return text
     end
 
     # this is where the config files are saved (ex. RAILS_ROOT/.js_test_driver)

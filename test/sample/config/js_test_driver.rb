@@ -13,3 +13,5 @@ measure_coverage
 
 includes 'test/sample/specs/spec_helper.js'
 includes 'test/sample/specs/**/*_spec.js'
+
+proxy('/super_duper/*').to('http://localhost:6666')
