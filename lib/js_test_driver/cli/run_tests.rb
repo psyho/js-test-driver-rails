@@ -11,7 +11,7 @@ module JsTestDriver
       end
 
       def run(opts = {})
-        jstd_jar_command.with_config.run_tests(opts[:tests])
+        jstd_jar_command.with_config.run_tests(opts[:tests]).reset_runner
 
         runner.run(jstd_jar_command.to_s)
       end

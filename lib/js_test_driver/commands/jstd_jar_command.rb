@@ -52,6 +52,10 @@ module JsTestDriver
         return option('--runnerMode', mode)
       end
 
+      def reset_runner
+        return option('--reset')
+      end
+
       def browser_timeout(timeout)
         return option('--browserTimeout', timeout)
       end
