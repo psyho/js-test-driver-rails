@@ -1,1 +1,1 @@
-jasmine/lib/jasmine.js
+jasmine/lib/jasmine-core/jasmine.js
