@@ -14,6 +14,8 @@ module JsTestDriver
     end
 
     def run(url)
+      require 'selenium-webdriver'
+
       trap_signals
 
       opts = {:url => "http://#{host}/wd/hub"}

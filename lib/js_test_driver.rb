@@ -2,8 +2,6 @@ require 'multi_json'
 require 'yaml'
 require 'fileutils'
 
-require 'selenium-webdriver'
-
 module JsTestDriver
   autoload :Application, 'js_test_driver/application'
   autoload :Config, 'js_test_driver/config'
