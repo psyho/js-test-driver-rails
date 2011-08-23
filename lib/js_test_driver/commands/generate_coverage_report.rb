@@ -11,6 +11,12 @@ module JsTestDriver
         arg(runtime_config.coverage_data_file)
       end
 
+      protected
+
+      def executable_not_found!
+        warn("Could not find executable: #{@command}")
+      end
+
     end
 
   end

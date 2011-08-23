@@ -3,7 +3,7 @@ module JsTestDriver
 
     class BaseCommand
       def initialize(executable)
-        @command = "#{executable}"
+        @command = executable.to_s
         ensure_installed!
 
         @options = []
@@ -25,12 +25,20 @@ module JsTestDriver
         return ([@command] + @options + @args).compact.join(' ')
       end
 
+      protected
+
+      def executable_not_found!
+        raise JsTestDriver::MissingDependencyError.new("Could not find executable: #{@command}")
+      end
+
       private
 
+      def installed?
+        !%x[which #{@command}].strip.empty?
+      end
+
       def ensure_installed!
-        if %x[which #{@command}].strip.empty?
-          raise JsTestDriver::MissingDependencyError.new("Could not find executable: #{@command}")
-        end
+        executable_not_found! unless installed?
       end
 
       def escape(value)
