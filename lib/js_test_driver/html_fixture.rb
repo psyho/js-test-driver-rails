@@ -20,7 +20,7 @@ module JsTestDriver
     def to_s
       <<JS
 if (typeof(#{namespace}) === 'undefined') { #{namespace} = {}; }
-#{namespace}.#{name} = #{self.to_h.to_json};
+#{namespace}.#{name} = #{MultiJson.encode(self.to_h)};
 JS
     end
 

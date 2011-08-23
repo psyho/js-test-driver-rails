@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "js-test-driver-rails"
 
-  s.add_dependency 'json'
+  s.add_dependency 'multi_json'
   s.add_dependency 'rake'
   s.add_dependency 'commander'
   s.add_dependency 'selenium-webdriver'
