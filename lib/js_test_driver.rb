@@ -1,6 +1,7 @@
 require 'multi_json'
 require 'yaml'
 require 'fileutils'
+require 'socket'
 
 module JsTestDriver
   autoload :Application, 'js_test_driver/application'

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    js-test-driver-rails (0.5.0.pre3)
+    js-test-driver-rails (0.5.0.pre4)
       commander
       multi_json
       rake
@@ -10,19 +10,19 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
-    childprocess (0.2.1)
+    childprocess (0.2.2)
       ffi (~> 1.0.6)
-    commander (4.0.5)
-      highline (>= 1.5.0)
+    commander (4.0.6)
+      highline (~> 1.5.0)
     ffi (1.0.9)
-    highline (1.6.2)
-    json_pure (1.5.3)
+    highline (1.5.2)
+    json_pure (1.6.1)
     mocha (0.9.9)
       rake
     multi_json (1.0.3)
     rake (0.8.7)
     rubyzip (0.9.4)
-    selenium-webdriver (2.4.0)
+    selenium-webdriver (2.8.0)
       childprocess (>= 0.2.1)
       ffi (>= 1.0.7)
       json_pure
