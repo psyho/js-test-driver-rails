@@ -2,6 +2,7 @@ require 'multi_json'
 require 'yaml'
 require 'fileutils'
 require 'socket'
+require 'rake'
 
 module JsTestDriver
   autoload :Application, 'js_test_driver/application'
