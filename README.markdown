@@ -68,7 +68,7 @@ Using Jasmine
 -------------
 
 By default JsTestDriver comes with a pretty simple Test::Unit like testing framework.
-However it supports a couple of other frameworks, including Jasmine (http://pivotal.github.com/jasmine/), which is an RSpec-like BDD framework.
+However it supports a couple of other frameworks, including Jasmine (https://jasmine.github.io/), which is an RSpec-like BDD framework.
 
 If you want to user Jasmine, simply add:
 
